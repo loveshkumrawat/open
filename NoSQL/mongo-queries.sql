@@ -2,8 +2,10 @@ show dbs;
 
 use test;
 
-db.createCollection("users");
+db.createCollection ("users");
+
 show collections;
+
 db.users.insertOne({"name": "Lovesh", "age": 24, 'email': "lk@gmail.com"});
 
 db.users.insertMany([
@@ -11,11 +13,13 @@ db.users.insertMany([
     {"name": "Swati", "age": 26, 'email': "sx@gmail.com"},
 ]);
 
+
 db.users.find()
 
 db.users.updateOne({"name": "Lovesh"}, {$set:{"age": "45"}});
 
 db.users.updateOne({"name": "Lovesh"}, {$set:{"age": "45", "email": 'asdh'}});
+
 
 db.users.find()
 
@@ -39,7 +43,7 @@ db.users.updateOne( { "name": "Aditya"}, {$pop: {hobbies: 1}});
 
 db.users.updateOne( { "name": "Aditya"}, {$remove: {hobbies: ["gdgrt"]}});
 
-db.users.find();
+db.users.find ();
 
 db.users.updateMany({}, {$set: {"institute": "DSF"}});
 
@@ -62,3 +66,38 @@ db.users.updateMany(
 -- db.users.drop();
 
 -- db.dropDatabase();
+
+
+db.users.find({"name":{$eq: "Lovesh"}})
+db.users.find({"name":{$ne: "Lovesh"}})
+db.users.find({"name":{$gt: "Aditya"}})
+db.users.find({"name":{$gte: "Aditya Pathak"}})
+db.users.find({"age":{$gt: "0"}})
+db.users.find({"age":{$gt: 0}})
+
+db.users.find({"age":{$lt: "0"}})
+db.users.find({"age":{$lte: 0}}) --less than equals too
+
+db.users.find({"age":{$in: [20,25]}}) -- in this list only not range
+db.users.find({"age":{$nin: [30,24,"dh"]}}) -- not in
+
+db.users.find({$or: [ {"age": 30}, {"age": 26} ]})
+db.users.find({$or: [{"age": 30}, {"age": 26}, {"age": "dh"}]})
+db.users.find({$and: [{"age": 30}, {"name": "Nilesh"}]})
+db.users.find({"age": {$not: {$ne:30}}})
+
+db.users.find({$nor: [{age: 30}, {name:"Lovesh"}]})
+-- $nand does not eqist it can be achive by,
+  -- $not
+db.users.find({ $nor: [ { age: 30, name: "Lovesh" } ] })
+  -- combination of $not & $and
+db.users.find({
+  $expr: {
+    $not: {
+      $and: [
+        { "age": 30 },
+        { "name": "Nilesh" }
+      ]
+    }
+  }
+})
